@@ -1,23 +1,16 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        I'm an example component.
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>
+        <h3>This shows that the route is really working!!</h3>
+        @{{ message }}
+        <router-link to="/vue"><a>Back to the root</a></router-link>
     </div>
-</template>
-
-<script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
-    }
-</script>
+ </template>
+ <script>
+ export default {
+   data () {
+     return {
+       message: 'Hoera!!!!'
+     };
+   }
+ };
+ </script>
