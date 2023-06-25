@@ -18,7 +18,7 @@ class BookCategorySeeder extends Seeder
                 'description' => 'Category description'
             ],
             [
-                'name' => 'Fantasy',
+                'name' => 'Fiction',
                 'description' => 'Category description'
             ],
             [

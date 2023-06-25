@@ -15,11 +15,12 @@ class Book extends Model
 
     public function category()
     {
-        return $this->belongsTo(BookCategory::class, 'id');
+        return $this->hasOne(BookCategory::class, 'id', 'category_id');
     }
+
     public function borrowed()
     {
-        return $this->hasMany(BookBorrow::class, 'id');
+        return $this->hasMany(BookBorrow::class);
     }
     //
 }

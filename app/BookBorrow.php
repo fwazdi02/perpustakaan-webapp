@@ -9,7 +9,7 @@ use App\User;
 class BookBorrow extends Model
 {
     protected $fillable = [
-        'book_id', 'user_id', 'due_date'
+        'book_id', 'user_id', 'due_date', 'returned_date'
     ];
     //
     public function book()

@@ -3,20 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\BookBorrow;
 use App\BookCategory;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::with('category')->withCount('borrowed')
-        ->get();
-        return response()->json(['success' => true , 'data' => $books], Response::HTTP_OK);
+        $books = Book::with('category')->get();
+        $collected = $books->map(function ($item){
+            $withCount = $item;
+            $withCount->borrowed_count = BookBorrow::where('book_id', $item->id)->whereNull('returned_date')->count();
+            return $withCount;
+        });
+        return response()->json(['success' => true , 'data' => $collected], Response::HTTP_OK);
     }
    
     public function list()
@@ -24,13 +31,20 @@ class BookController extends Controller
         $books = Book::with('category')->get();
         return response()->json(['success' => true , 'data' => $books], Response::HTTP_OK);
     }
+   
+    public function activeBorrowers(Request $request, $id)
+    {
+        $book = Book::findOrFail($id);
+        $activeBorrowers = $book->borrowed()->whereNull('returned_date')->get();
+        return response()->json(['success' => true, 'data' => $activeBorrowers], Response::HTTP_OK);
+    }
 
     public function store(Request $request)
     {
         $rules = [
             'title' => 'required',
             'author' => 'required',
-            'category' => [
+            'category_id' => [
                 'required',
                 Rule::exists('book_categories', 'id'),
             ],

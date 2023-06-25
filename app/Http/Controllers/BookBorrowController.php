@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BookBorrow;
+use App\Book;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Response;
@@ -48,8 +49,16 @@ class BookBorrowController extends Controller
 
             return response()->json($response, Response::HTTP_BAD_REQUEST);
         }
-
+        
         $borrowData = $validator->validated();
+        
+        $currentCount = BookBorrow::where(['book_id' => $request->get('book_id'), 'returned_date' => null])->count();
+        $book = Book::findOrFail($request->get('book_id'));
+
+        if($currentCount == $book->quantity){
+            return response()->json(['success' => false, 'message' => 'Book out of stock'], Response::HTTP_BAD_REQUEST);
+        }
+
         $borrow = BookBorrow::create($borrowData);
         return response()->json(['success' => true , 'data' => $borrow], Response::HTTP_OK);
     }
@@ -81,6 +90,46 @@ class BookBorrowController extends Controller
         }
 
         $borrowData = $validator->validated();
+        $borrow->update($borrowData);
+        return response()->json(['success' => true , 'data' => $borrow], Response::HTTP_OK);
+    }
+
+
+    public function returnBook(Request $request)
+    {
+
+        $rules = [
+            'book_id' => [
+                'required',
+                Rule::exists('books', 'id'),
+            ],
+            'user_id' => [
+                'required',
+                Rule::exists('users', 'id'),
+            ],
+            'returned_date' => 'required|date',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            $response = [
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ];
+
+            return response()->json($response, Response::HTTP_BAD_REQUEST);
+        }
+        
+        $borrowData = $validator->validated();
+        $borrow = BookBorrow::where([
+            'user_id' => $request->get('user_id'), 
+            'book_id' => $request->get('book_id'), 
+            'returned_date' => null])
+        ->first();
+        if(!$borrow){
+            return response()->json(['success' => false, 'message' => "User not borrowed this book"], Response::HTTP_NOT_FOUND);
+        }
         $borrow->update($borrowData);
         return response()->json(['success' => true , 'data' => $borrow], Response::HTTP_OK);
     }
