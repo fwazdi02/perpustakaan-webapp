@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookCategoryController;
+use App\Http\Controllers\BookBorrowController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -58,6 +59,22 @@ Route::put('/categories/{id}', [BookCategoryController::class, 'update']);
 Route::delete('/categories/{id}', [BookCategoryController::class, 'destroy']);
 
 
+
+Route::get('/borrow-books', [BookBorrowController::class, 'index']);
+Route::get('/borrow-books/unreturned', [BookBorrowController::class, 'unreturned']);
+Route::post('/borrow-books', [BookBorrowController::class, 'store']);
+Route::get('/borrow-books/{id}', [BookBorrowController::class, 'show']);
+Route::put('/borrow-books/{id}', [BookBorrowController::class, 'update']);
+Route::delete('/borrow-books/{id}', [BookBorrowController::class, 'destroy']);
+
+
+// Route::group(['middleware' => 'auth:api'], function () {
+//     Route::post('borrow-books', [BookBorrowController::class, 'store']);
+//     Route::get('borrow-books/{id}', [BookBorrowController::class, 'show']);
+//     Route::put('borrow-books/{id}', [BookBorrowController::class, 'update']);
+//     Route::delete('borrow-books/{id}', [BookBorrowController::class, 'destroy']);
+// });
+
 // Route::middleware('auth:api')->group(function () {
 //     Route::get('/categories', [BookCategoryController::class, 'index']);
 //     Route::post('/categories', [BookCategoryController::class, 'store']);
@@ -73,3 +90,6 @@ Route::delete('/categories/{id}', [BookCategoryController::class, 'destroy']);
 //     Route::put('/books/{book}', [BookController::class, 'update']);
 //     Route::delete('/books/{book}', [BookController::class, 'destroy']);
 // });
+
+
+

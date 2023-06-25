@@ -17,12 +17,12 @@ class CreateBooksTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('author');
-            $table->bigInteger('category')->unsigned();
+            $table->bigInteger('category_id')->unsigned();
             $table->string('isbn');
             $table->date('published_date');
             $table->timestamps();
             $table->unique('isbn');
-            $table->foreign('category')->references('id')->on('book_categories');
+            $table->foreign('category_id')->references('id')->on('book_categories');
         });
     }
 

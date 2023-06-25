@@ -15,12 +15,12 @@ class CreateBookBorrowsTable extends Migration
     {
         Schema::create('book_borrows', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('book')->unsigned();
-            $table->foreign('book')->references('id')->on('books');
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('book_id')->unsigned();
+            $table->foreign('book_id')->references('id')->on('books');
+            $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->date('due_date');
-            $table->date('returned_date')->default(null);
+            $table->date('returned_date')->nullable()->default(null);
             $table->timestamps();
         });
     }

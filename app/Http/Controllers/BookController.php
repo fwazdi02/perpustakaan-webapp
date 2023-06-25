@@ -14,6 +14,13 @@ class BookController extends Controller
 {
     public function index()
     {
+        $books = Book::with('category')->withCount('borrowed')
+        ->get();
+        return response()->json(['success' => true , 'data' => $books], Response::HTTP_OK);
+    }
+   
+    public function list()
+    {
         $books = Book::with('category')->get();
         return response()->json(['success' => true , 'data' => $books], Response::HTTP_OK);
     }
