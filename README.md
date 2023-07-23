@@ -3,13 +3,13 @@
 
 1. composer install
 
-2. php artisan key:generate
+2. copy and rename .env.example to .env
 
-3. copy and rename .env.example to .env
+3. php artisan key:generate
 
-3. adjust absolute path of DB_DATABASE=your_absolute_path\database\database.sqlite in .env
+4. adjust absolute path of DB_DATABASE=your_absolute_path\database\database.sqlite in .env
 
-4. database.sql comited with data so you can just run : php artisan serve
+5. database.sql comited with data so you can just run : php artisan serve
 
 
 ### Migrate Database
